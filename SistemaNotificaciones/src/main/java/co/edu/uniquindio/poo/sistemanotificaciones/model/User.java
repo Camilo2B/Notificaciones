@@ -17,11 +17,46 @@ public abstract class User implements Observer {
 
     // Método plantilla que define el esqueleto del algoritmo
 
-    public void update(String eventType, String message) {
+    public void actualizar(String eventType, String message) {
         String formattedMessage = formatMessage(eventType, message);
-        notificationStrategy.enviarNotification(formattedMessage, email);
+        // Crear una notificación
+        Notification notification = new Notification(contact, formattedMessage, notificationStrategy);
+
+        // Crear la cadena de filtros
+        NotificationFilter filter = createFilterChain();
+
+        // Validar la notificación
+        if (filter.filter(notification)) {
+            // Crear comando
+            NotificationCommand command = new SendNotificationCommand(notification);
+
+            // Enviar al invocador
+            NotificationInvoker invoker = NotificationInvoker.getInstance();
+
+            // Decidir si es prioritario o no
+            if (isPriority(eventType)) {
+                invoker.executeCommand(command);
+            } else {
+                invoker.queueCommand(command);
+            }
+        }
     }
 
-    // Método que deben implementar las subclases (parte del patrón Template Method)
-    protected abstract String formatMessage(String eventType, String message);
+    // Método para determinar si un evento es prioritario
+    protected boolean isPriority(String eventType) {
+        return eventType.contains("alert") || eventType.equals("security");
+    }
+
+    // Método para crear la cadena de filtros
+    protected NotificationFilter createFilterChain() {
+        NotificationFilter emptyFilter = new EmptyMessageFilter();
+        NotificationFilter blockedFilter = new BlockedUserFilter();
+
+        emptyFilter.setNext(blockedFilter);
+
+        return emptyFilter;
+    }
+
+    // Método abstracto que deben implementar las subclases
+    protected abstract String formatMessage(String message);
 }

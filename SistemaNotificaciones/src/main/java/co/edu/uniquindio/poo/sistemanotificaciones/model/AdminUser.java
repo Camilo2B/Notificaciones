@@ -6,14 +6,14 @@ public class AdminUser extends User {
 
     }
 
-    @Override
-    protected String formatMessage(String eventType, String message) {
-        return "[AdminUser] " + eventType.toUpperCase() + ": " + message;
+    protected String formatMessage(String message) {
+        return "[AdminUser] " + message.toUpperCase() + ": " + message;
+    }
+
+    protected boolean isPriority(String eventType) {
+        // Los administradores siempre tienen prioridad
+        return true;
     }
 
 
-    @Override
-    public void actualizar(String tipoEvento, String mensaje) {
-
-    }
 }

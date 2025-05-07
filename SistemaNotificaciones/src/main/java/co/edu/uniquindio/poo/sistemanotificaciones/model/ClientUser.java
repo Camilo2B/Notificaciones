@@ -5,9 +5,8 @@ public class ClientUser extends User {
         super(name, contact, strategy);
     }
 
-    @Override
-    protected String formatMessage(String eventType, String message) {
-        return "[Notificación para Cliente] " + message + " (" + eventType + ")";
+    protected String formatMessage(String message) {
+        return "[Cliente] " + message;
     }
 
     @Override

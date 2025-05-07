@@ -5,8 +5,7 @@ public class GuestUser extends User {
         super(name, contact, strategy);
     }
 
-    @Override
-    protected String formatMessage(String eventType, String message) {
+    protected String formatMessage(String message) {
         return "[Invitado] " + message;
     }
 
