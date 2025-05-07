@@ -10,4 +10,4 @@ public abstract class NotificationFilter {
 
     public abstract boolean filter(Notification notification);
 }
-}
+

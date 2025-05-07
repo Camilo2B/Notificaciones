@@ -16,11 +16,11 @@ public abstract class User implements Observer {
     }
 
     // Método plantilla que define el esqueleto del algoritmo
-
+    @Override
     public void actualizar(String eventType, String message) {
-        String formattedMessage = formatMessage(eventType, message);
+        String formattedMessage = formatMessage(message);
         // Crear una notificación
-        Notification notification = new Notification(contact, formattedMessage, notificationStrategy);
+        Notification notification = new Notification("contact", formattedMessage, notificationStrategy);
 
         // Crear la cadena de filtros
         NotificationFilter filter = createFilterChain();

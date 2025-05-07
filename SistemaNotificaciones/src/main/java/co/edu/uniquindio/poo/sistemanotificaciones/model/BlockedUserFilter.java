@@ -10,7 +10,10 @@ public class BlockedUserFilter extends NotificationFilter {
     @Override
     public boolean filter(Notification notification) {
         if(blockedUsers.contains(notification.getRecipient())) {
-            System.out.println("Blocked user: " + notification.getRecipient());
+            System.out.println("Usuario bloqueado");
+            return false;
         }
+
+        return next == null || next.filter(notification);
     }
 }
