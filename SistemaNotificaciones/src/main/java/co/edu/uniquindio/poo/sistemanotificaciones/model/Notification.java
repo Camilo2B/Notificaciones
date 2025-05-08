@@ -1,5 +1,7 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model;
 
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationStrategy;
+
 public class Notification {
     private String recipient;
     private String message;
@@ -24,6 +26,6 @@ public class Notification {
     }
 
     public void send() {
-        strategy.enviarNotification(message, recipient);
+        strategy.sendNotification(message, recipient);
     }
 }

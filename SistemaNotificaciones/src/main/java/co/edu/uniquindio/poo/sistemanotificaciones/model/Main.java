@@ -1,5 +1,14 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model;
 
+import co.edu.uniquindio.poo.sistemanotificaciones.model.core.AdminUser;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.core.ClientUser;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.core.GuestUser;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.EventManager;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.EmailNotification;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationStrategy;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.PushNotification;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.SMSNotification;
+
 public class Main {
     public static void main(String[] args) {
         // Crear el gestor de eventos
