@@ -2,9 +2,9 @@ package co.edu.uniquindio.poo.sistemanotificaciones.model.strategy;
 
 public class EmailNotification implements NotificationStrategy {
 
-    public void sendNotification(String message, String receptor) {
-        System.out.println("Enviando Email a" + receptor + ": " + message);
-
-
+    @Override
+    public void sendNotification(String recipient, String message) {
+        System.out.println("\uD83D\uDCE7 Enviando Email a" + recipient + ": " + message);
     }
+
 }

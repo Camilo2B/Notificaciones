@@ -6,30 +6,33 @@ import java.util.List;
 import java.util.Map;
 
 public class EventManager {
-    private Map<String, List<Observer>> listeners = new HashMap<>();
+    private Map<String, List<EventListener>> listeners = new HashMap<>();
 
-    public EventManager(String... tiposEventos) {
-        for (String tipoEvento : tiposEventos) {
-            this.listeners.put(tipoEvento, new ArrayList<>());
+    public EventManager(String... events) {
+        for (String event : events) {
+            listeners.put(event, new ArrayList<>());
         }
     }
 
-    public void subscribe(String tipoEvento, Observer observer) {
-        List<Observer> users = listeners.get(tipoEvento);
-        users.add(observer);
-        System.out.println("Suscrito a evento: " + tipoEvento);
+    public void subscribe(String evento, EventListener listener) {
+        List<EventListener> users = listeners.get(evento);
+        if (!users.contains(listener)) {
+            users.add(listener);
+        }
+        System.out.println("Suscrito a evento: " + evento);
     }
 
-    public void unsubscribe(String tipoEvento, Observer observer) {
-        List<Observer> users = listeners.get(tipoEvento);
-        users.remove(observer);
-        System.out.println("Desuscrito de evento: " + tipoEvento);
+    public void unsubscribe(String event, EventListener listener) {
+        listeners.get(event).remove(listener);
+        System.out.println("Desuscrito de evento: " + event);
     }
 
-    public void notify(String tipoEvento, String mensaje) {
-        List<Observer> users = listeners.get(tipoEvento);
-        for (Observer observer : users) {
-            observer.actualizar(tipoEvento, mensaje);
+    public void notifySubscribers(String event, String message) {
+        List<EventListener> users = listeners.get(event);
+        System.out.println("🔔 Notificando evento '" + event + "': " + message);
+        for (EventListener listener : users) {
+            listener.sendNotification(message);
         }
     }
+
 }

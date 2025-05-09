@@ -1,66 +1,113 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model.core;
 
-import co.edu.uniquindio.poo.sistemanotificaciones.model.*;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.Observer;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationStrategy;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.BlockedUserFilter;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.EmptyMessageFilter;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.NotificationFilter;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.SMSNotification;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.EventListener;
 
-public abstract class User implements Observer {
+public abstract class User implements EventListener {
     protected String name;
+    protected String id;
+    protected String phone;
     protected String email;
     protected NotificationStrategy notificationStrategy;
+    protected boolean blocked;
 
-    public User(String name, String email, NotificationStrategy notificationStrategy) {
+    /**
+     * Método Constructor de la clase Usuario
+     *
+     * @param name
+     * @param id
+     * @param phone
+     * @param email
+     */
+    public User(String name, String id, String phone, String email) {
         this.name = name;
+        this.id = id;
+        this.phone = phone;
         this.email = email;
-        this.notificationStrategy = notificationStrategy;
+        blocked = false;
     }
 
-    public void setNotificationStrategy(NotificationStrategy notificationStrategy) {
-        this.notificationStrategy = notificationStrategy;
+    //=====================================================//
+
+    // Template Method
+    public final String formatMessage(String message) {
+        String header = getHeader();
+        String body = getBody(message);
+        String footer = getFooter();
+        return header + "\n" + body + "\n" + footer;
     }
 
-    // Método plantilla que define el esqueleto del algoritmo
+    protected abstract String getHeader();
+
+    protected abstract String getBody(String message);
+
+    protected abstract String getFooter();
+
+    //=====================================================//
+
+    // Inyectar la estrategia desde fuera
+    public void setNotificationStrategy(NotificationStrategy strategy) {
+        this.notificationStrategy = strategy;
+    }
+
+    //=====================================================//
+
     @Override
-    public void actualizar(String eventType, String message) {
-        String formattedMessage = formatMessage(message);
-        // Crear una notificación
-        Notification notification = new Notification("contact", formattedMessage, notificationStrategy);
-
-        // Crear la cadena de filtros
-        NotificationFilter filter = createFilterChain();
-
-        // Validar la notificación
-        if (filter.filter(notification)) {
-            // Crear comando
-            NotificationCommand command = new SendNotificationCommand(notification);
-
-            // Enviar al invocador
-            NotificationInvoker invoker = NotificationInvoker.getInstance();
-
-            // Decidir si es prioritario o no
-            if (isPriority(eventType)) {
-                invoker.executeCommand(command);
+    public void sendNotification(String message) {
+        String formatted = formatMessage(message);
+        if (notificationStrategy != null) {
+            // Decide qué dato usar como destino según el tipo de canal
+            if (notificationStrategy instanceof SMSNotification) {
+                notificationStrategy.sendNotification(phone, formatted);
             } else {
-                invoker.queueCommand(command);
+                notificationStrategy.sendNotification(email, formatted);
             }
+        } else {
+            System.out.println("⚠ Estrategia de notificación no configurada para el usuario " + name);
         }
     }
 
-    // Método para determinar si un evento es prioritario
-    protected boolean isPriority(String eventType) {
-        return eventType.contains("alert") || eventType.equals("security");
+    //=====================================================//
+
+    //=================GETTERS Y SETTERS===================//
+
+
+    public String getName() {
+        return name;
     }
 
-    // Método para crear la cadena de filtros
-    protected NotificationFilter createFilterChain() {
-        NotificationFilter emptyFilter = new EmptyMessageFilter();
-        NotificationFilter blockedFilter = new BlockedUserFilter();
-
-        emptyFilter.setNext(blockedFilter);
-
-        return emptyFilter;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    // Método abstracto que deben implementar las subclases
-    protected abstract String formatMessage(String message);
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isBlocked() { return blocked; }
+
 }

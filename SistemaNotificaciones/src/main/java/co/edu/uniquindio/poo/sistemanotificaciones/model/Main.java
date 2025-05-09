@@ -1,80 +1,74 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model;
 
-import co.edu.uniquindio.poo.sistemanotificaciones.model.core.AdminUser;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.core.ClientUser;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.core.GuestUser;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.EventManager;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.EmailNotification;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationStrategy;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.PushNotification;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.SMSNotification;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.core.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.command.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Crear el gestor de eventos
-        EventManager eventManager = new EventManager(
-                "login", "logout", "purchase", "news", "security", "promotion"
-        );
-
-        // Crear estrategias de notificación
-        NotificationStrategy emailStrategy = new EmailNotification();
-        NotificationStrategy smsStrategy = new SMSNotification();
-        NotificationStrategy pushStrategy = new PushNotification();
+        // Crear el sistema de notificaciones (gestiona eventos)
+        NotificationSystem sistema = new NotificationSystem();
 
         // Crear usuarios
-        AdminUser admin = new AdminUser("Admin1", "admin@example.com", emailStrategy);
-        ClientUser client1 = new ClientUser("Cliente1", "555-123-456", smsStrategy);
-        GuestUser guest = new GuestUser("Guest1", "guest@example.com", emailStrategy);
+        User admin = new AdminUser("Ana", "001", "3001112233", "ana@empresa.com");
+        User cliente = new ClientUser("Luis", "002", "3002223344", "luis@email.com");
 
-        // Crear observadores adicionales
-        Logger logger = new Logger();
-        Auditor auditor = new Auditor();
+        // Asignar estrategias de envío
+        admin.setNotificationStrategy(new EmailNotification());
+        cliente.setNotificationStrategy(new SMSNotification());
 
-        // Suscribir observadores a eventos
-        eventManager.subscribe("login", admin);
-        eventManager.subscribe("security", admin);
+        // Suscribir usuarios al evento "perfilActualizado"
+        sistema.registrarUsuario("perfilActualizado", admin);
+        sistema.registrarUsuario("perfilActualizado", cliente);
 
-        eventManager.subscribe("purchase", client1);
-        eventManager.subscribe("promotion", client1);
+        // Agregar otros observadores (Observer)
+        sistema.registrarUsuario("perfilActualizado", new Logger());
+        sistema.registrarUsuario("perfilActualizado", new Auditor());
 
-        eventManager.subscribe("news", guest);
+        // NOTIFICACIÓN válida
+        Notification notifValida = new Notification(cliente, "Tu perfil fue actualizado.", new SMSNotification());
 
-        // Suscribir logger y auditor a múltiples eventos
-        eventManager.subscribe("login", logger);
-        eventManager.subscribe("purchase", logger);
-        eventManager.subscribe("security", logger);
+        // NOTIFICACIÓN con mensaje vacío (fallará)
+        Notification notifVacia = new Notification(admin, "", new EmailNotification());
 
-        eventManager.subscribe("login", auditor);
-        eventManager.subscribe("security", auditor);
+        // Filtros (Chain of Responsibility)
+        NotificationFilter filtro1 = new EmptyMessageFilter();
+        NotificationFilter filtro2 = new BlockedUserFilter();
+        filtro1.setNext(filtro2);
 
-        System.out.println("\n--- Simulación del Sistema de Notificaciones ---");
+        // INVOCADOR de comandos
+        NotificationInvoker invoker = new NotificationInvoker();
 
-        // Simular eventos
-        eventManager.notify("login", "Nuevo inicio de sesión desde dispositivo desconocido");
-        System.out.println();
+        // Probar notificación válida
+        System.out.println("\n📨 Enviando notificación válida:");
+        if (filtro1.apply(notifValida)) {
+            NotificationCommand cmd1 = new SendNotificationCommand(notifValida);
+            invoker.addCommand(cmd1);
+        } else {
+            System.out.println("❌ No se puede enviar la notificación válida.");
+        }
 
-        eventManager.notify("purchase", "Nueva compra por $200");
-        System.out.println();
+        // Probar notificación inválida (mensaje vacío)
+        System.out.println("\n📨 Enviando notificación vacía:");
+        if (filtro1.apply(notifVacia)) {
+            NotificationCommand cmd2 = new SendNotificationCommand(notifVacia);
+            invoker.addCommand(cmd2);
+        } else {
+            System.out.println("❌ No se puede enviar la notificación vacía.");
+        }
 
-        eventManager.notify("security", "Intento de acceso no autorizado");
-        System.out.println();
+        // Ejecutar todos los comandos válidos
+        System.out.println("\n▶️ Ejecutando comandos:");
+        invoker.executeAll();
 
-        // Procesar la cola de notificaciones
-        NotificationInvoker.getInstance().processQueue();
-        System.out.println();
+        // Deshacer último comando
+        System.out.println("\n↩️ Deshaciendo el último envío:");
+        invoker.undoLast();
 
-        // Cambiar estrategia de notificación
-        System.out.println("Cambiando estrategia de notificación para Cliente1 a Push...");
-        client1.setNotificationStrategy(pushStrategy);
-
-        // Enviar otra notificación
-        eventManager.notify("promotion", "Oferta especial de fin de semana");
-
-        // Procesar cola nuevamente
-        NotificationInvoker.getInstance().processQueue();
-
-        // Deshacer última notificación
-        System.out.println("\nCancelando última notificación...");
-        NotificationInvoker.getInstance().undoLastCommand();
+        // Simular evento general usando Observer puro
+        System.out.println("\n📢 Disparando evento de perfil actualizado:");
+        sistema.dispararEvento("perfilActualizado", "¡Se actualizó tu información correctamente!");
     }
 }

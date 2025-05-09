@@ -2,9 +2,9 @@ package co.edu.uniquindio.poo.sistemanotificaciones.model.strategy;
 
 public class SMSNotification implements NotificationStrategy {
 
-    public void sendNotification(String message, String recipient) {
-        System.out.println("Enviando SMS a " + recipient + ": " + message);
+    @Override
+    public void sendNotification(String recipient, String message) {
+        System.out.println("\uD83D\uDCF1 Enviando SMS a " + recipient + ": " + message);
     }
+
 }
-
-
