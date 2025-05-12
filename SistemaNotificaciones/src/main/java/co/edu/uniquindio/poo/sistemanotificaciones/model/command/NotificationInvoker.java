@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 
 public class NotificationInvoker {
+
     private static NotificationInvoker instance;
     private Queue<NotificationCommand> commandQueue = new LinkedList<>();
     private List<NotificationCommand> commandHistory = new ArrayList<>();
@@ -24,26 +25,14 @@ public class NotificationInvoker {
         System.out.println("Comando agregado a la cola");
     }
 
-    public void executeCommand(NotificationCommand command) {
-        command.execute();
-        commandHistory.add(command);
-        System.out.println("Comando ejecutado inmediatamente");
-    }
-
-    public void processQueue() {
-        System.out.println("Procesando cola de comandos...");
-        NotificationCommand command;
-        while ((command = commandQueue.poll()) != null) {
+    public void executeCommands() {
+        for(NotificationCommand command : commandQueue) {
             command.execute();
             commandHistory.add(command);
         }
+        commandQueue.clear();
+
+        System.out.println("Comandos ejecutados exitosamente");
     }
 
-    public void undoLastCommand() {
-        if (!commandHistory.isEmpty()) {
-            NotificationCommand command = commandHistory.remove(commandHistory.size() - 1);
-            command.undo();
-            System.out.println("Se deshizo el último comando");
-        }
-    }
 }

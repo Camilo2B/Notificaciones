@@ -3,6 +3,6 @@ module co.edu.uniquindio.poo.sistemanotificaciones {
     requires javafx.fxml;
 
 
-    opens co.edu.uniquindio.poo.sistemanotificaciones to javafx.fxml;
-    exports co.edu.uniquindio.poo.sistemanotificaciones;
+    opens co.edu.uniquindio.poo.sistemanotificaciones.model to javafx.fxml;
+    exports co.edu.uniquindio.poo.sistemanotificaciones.model;
 }

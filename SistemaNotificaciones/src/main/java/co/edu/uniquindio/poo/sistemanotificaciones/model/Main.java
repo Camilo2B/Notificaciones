@@ -45,7 +45,8 @@ public class Main {
         System.out.println("\n📨 Enviando notificación válida:");
         if (filtro1.apply(notifValida)) {
             NotificationCommand cmd1 = new SendNotificationCommand(notifValida);
-            invoker.addCommand(cmd1);
+            invoker.queueCommand(cmd1);
+            invoker.executeCommands();
         } else {
             System.out.println("❌ No se puede enviar la notificación válida.");
         }
@@ -54,21 +55,17 @@ public class Main {
         System.out.println("\n📨 Enviando notificación vacía:");
         if (filtro1.apply(notifVacia)) {
             NotificationCommand cmd2 = new SendNotificationCommand(notifVacia);
-            invoker.addCommand(cmd2);
+            invoker.queueCommand(cmd2);
+            invoker.executeCommands();
         } else {
             System.out.println("❌ No se puede enviar la notificación vacía.");
         }
 
         // Ejecutar todos los comandos válidos
         System.out.println("\n▶️ Ejecutando comandos:");
-        invoker.executeAll();
-
-        // Deshacer último comando
-        System.out.println("\n↩️ Deshaciendo el último envío:");
-        invoker.undoLast();
+        invoker.executeCommands();
 
         // Simular evento general usando Observer puro
-        System.out.println("\n📢 Disparando evento de perfil actualizado:");
         sistema.dispararEvento("perfilActualizado", "¡Se actualizó tu información correctamente!");
     }
 }

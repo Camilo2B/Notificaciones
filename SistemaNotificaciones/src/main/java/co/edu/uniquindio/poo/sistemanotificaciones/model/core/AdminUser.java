@@ -10,7 +10,7 @@ public class AdminUser extends User {
 
     @Override
     protected String getHeader() {
-        return "[ADMIN] Notificación importante para " + name;
+        return "[ADMIN] Notificación importante para " + name ;
     }
 
     @Override
