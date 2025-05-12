@@ -54,21 +54,9 @@ public abstract class User implements EventListener {
         this.notificationStrategy = strategy;
     }
 
-    //=====================================================//
-
     @Override
-    public void sendNotification(String message) {
-        String formatted = formatMessage(message);
-        if (notificationStrategy != null) {
-            // Decide qué dato usar como destino según el tipo de canal
-            if (notificationStrategy instanceof SMSNotification) {
-                notificationStrategy.sendNotification(phone, formatted);
-            } else {
-                notificationStrategy.sendNotification(email, formatted);
-            }
-        } else {
-            System.out.println("⚠ Estrategia de notificación no configurada para el usuario " + name);
-        }
+    public void notify(String message) {
+        notificationStrategy.sendNotification(this, message);
     }
 
     //=====================================================//

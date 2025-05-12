@@ -20,12 +20,12 @@ public class Main {
         cliente.setNotificationStrategy(new SMSNotification());
 
         // Suscribir usuarios al evento "perfilActualizado"
-        sistema.registrarUsuario("perfilActualizado", admin);
-        sistema.registrarUsuario("perfilActualizado", cliente);
+        sistema.subscribe("Actualización de perfil", admin);
+        sistema.subscribe("Actualización de perfil", cliente);
 
         // Agregar otros observadores (Observer)
-        sistema.registrarUsuario("perfilActualizado", new Logger());
-        sistema.registrarUsuario("perfilActualizado", new Auditor());
+        sistema.subscribe("Actualización de perfil", new Logger());
+        sistema.subscribe("Actualización de perfil", new Auditor());
 
         // NOTIFICACIÓN válida
         Notification notifValida = new Notification(cliente, "Tu perfil fue actualizado.", new SMSNotification());
@@ -34,38 +34,31 @@ public class Main {
         Notification notifVacia = new Notification(admin, "", new EmailNotification());
 
         // Filtros (Chain of Responsibility)
-        NotificationFilter filtro1 = new EmptyMessageFilter();
-        NotificationFilter filtro2 = new BlockedUserFilter();
-        filtro1.setNext(filtro2);
+        NotificationFilterChain chain = new NotificationFilterChain();
+        chain.addFilter(new EmptyMessageFilter());
+        chain.addFilter(new BlockedUserFilter());
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();
 
         // Probar notificación válida
         System.out.println("\n📨 Enviando notificación válida:");
-        if (filtro1.apply(notifValida)) {
-            NotificationCommand cmd1 = new SendNotificationCommand(notifValida);
-            invoker.queueCommand(cmd1);
-            invoker.executeCommands();
-        } else {
-            System.out.println("❌ No se puede enviar la notificación válida.");
-        }
+        NotificationCommand cmd1 = new SendNotificationCommand(notifValida);
+        invoker.addCommand(cmd1);
+        invoker.executeCommands();
+
 
         // Probar notificación inválida (mensaje vacío)
         System.out.println("\n📨 Enviando notificación vacía:");
-        if (filtro1.apply(notifVacia)) {
-            NotificationCommand cmd2 = new SendNotificationCommand(notifVacia);
-            invoker.queueCommand(cmd2);
-            invoker.executeCommands();
-        } else {
-            System.out.println("❌ No se puede enviar la notificación vacía.");
-        }
+        NotificationCommand cmd2 = new SendNotificationCommand(notifVacia);
+        invoker.addCommand(cmd2);
+        invoker.executeCommands();
 
         // Ejecutar todos los comandos válidos
         System.out.println("\n▶️ Ejecutando comandos:");
         invoker.executeCommands();
 
         // Simular evento general usando Observer puro
-        sistema.dispararEvento("perfilActualizado", "¡Se actualizó tu información correctamente!");
+        sistema.notifySubscribers("perfilActualizado", "¡Se actualizó tu información correctamente!");
     }
 }

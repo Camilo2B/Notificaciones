@@ -8,8 +8,7 @@ import java.util.Queue;
 public class NotificationInvoker {
 
     private static NotificationInvoker instance;
-    private Queue<NotificationCommand> commandQueue = new LinkedList<>();
-    private List<NotificationCommand> commandHistory = new ArrayList<>();
+    private Queue<NotificationCommand> queue = new LinkedList<>();
 
     public NotificationInvoker() {}
 
@@ -20,17 +19,16 @@ public class NotificationInvoker {
         return instance;
     }
 
-    public void queueCommand(NotificationCommand command) {
-        commandQueue.add(command);
+    public void addCommand(NotificationCommand command) {
+        queue.add(command);
         System.out.println("Comando agregado a la cola");
     }
 
     public void executeCommands() {
-        for(NotificationCommand command : commandQueue) {
+        for(NotificationCommand command : queue) {
             command.execute();
-            commandHistory.add(command);
         }
-        commandQueue.clear();
+        queue.clear();
 
         System.out.println("Comandos ejecutados exitosamente");
     }

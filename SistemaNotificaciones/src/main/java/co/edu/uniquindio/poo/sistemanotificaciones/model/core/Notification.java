@@ -24,4 +24,9 @@ public class Notification {
     public NotificationStrategy getStrategy() {
         return strategy;
     }
+
+    public void send() {
+        String formatted = user.formatMessage(message);
+        strategy.sendNotification(user, formatted);
+    }
 }

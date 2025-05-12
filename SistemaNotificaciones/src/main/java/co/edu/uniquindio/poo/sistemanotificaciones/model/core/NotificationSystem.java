@@ -2,29 +2,39 @@ package co.edu.uniquindio.poo.sistemanotificaciones.model.core;
 
 import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class NotificationSystem {
 
-    private EventManager eventManager;
+    private Map<String, List<EventListener>> listeners = new HashMap<>();
 
-    /**
-     * Registra un observador (usuario, logger, auditor...) a un tipo de evento.
-     */
-    public void registrarUsuario(String evento, EventListener listener) {
-        eventManager.subscribe(evento, listener);
+    public NotificationSystem(String... events) {
+        for (String event : events) {
+            listeners.put(event, new ArrayList<>());
+        }
     }
 
-    /**
-     * Elimina un observador de un tipo de evento.
-     */
-    public void eliminarUsuario(String evento, EventListener listener) {
-        eventManager.unsubscribe(evento, listener);
+    public void subscribe(String evento, EventListener listener) {
+        List<EventListener> users = listeners.get(evento);
+        if (!users.contains(listener)) {
+            users.add(listener);
+        }
+        System.out.println("Suscrito a evento: " + evento);
     }
 
-    /**
-     * Dispara un evento con un mensaje para todos los suscriptores.
-     */
-    public void dispararEvento(String evento, String mensaje) {
-        System.out.println("📢 Disparando evento '" + evento + "'...");
-        eventManager.notifySubscribers(evento, mensaje);
+    public void unsubscribe(String event, EventListener listener) {
+        listeners.get(event).remove(listener);
+        System.out.println("Desuscrito de evento: " + event);
+    }
+
+    public void notifySubscribers(String event, String message) {
+        List<EventListener> users = listeners.get(event);
+        System.out.println("🔔 Notificando evento '" + event + "': " + message);
+        for (EventListener listener : users) {
+            listener.notify(message);
+        }
     }
 }

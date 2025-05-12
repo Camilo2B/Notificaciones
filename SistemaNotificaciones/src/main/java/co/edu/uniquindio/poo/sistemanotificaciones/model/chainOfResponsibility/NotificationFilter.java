@@ -10,14 +10,7 @@ public abstract class NotificationFilter {
         this.next = next;
     }
 
-    public boolean apply(Notification notification) {
-        if (check(notification)) {
-            return next == null || next.apply(notification);
-        }
-        return false;
-    }
-
-    protected abstract boolean check(Notification notification);
+    public abstract void check(Notification notification);
 
 }
 
