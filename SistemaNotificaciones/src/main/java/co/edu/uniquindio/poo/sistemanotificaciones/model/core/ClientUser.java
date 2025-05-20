@@ -4,8 +4,8 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationSt
 
 public class ClientUser extends User {
 
-    public ClientUser(String name, String id, String phone, String email) {
-        super(name, id, phone, email);
+    public ClientUser(String name, String email, String phone) {
+        super(name, email, phone);
     }
 
     @Override
@@ -21,6 +21,10 @@ public class ClientUser extends User {
     @Override
     protected String getFooter() {
         return "Gracias por confiar en nosotros.";
+    }
+
+    public Notification createProfileUpdateNotification(String customMessage) {
+        return new Notification(this, customMessage, strategy);
     }
 
 }

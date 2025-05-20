@@ -4,8 +4,8 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationSt
 
 public class GuestUser extends User {
 
-    public GuestUser(String name, String id, String phone, String email) {
-        super(name, id, phone, email);
+    public GuestUser(String name, String email, String phone) {
+        super(name, email, phone);
     }
 
     @Override
@@ -21,6 +21,10 @@ public class GuestUser extends User {
     @Override
     protected String getFooter() {
         return "Regístrate para más beneficios.";
+    }
+
+    public Notification createProfileUpdateNotification(String customMessage) {
+        return new Notification(this, customMessage, strategy);
     }
 
 }

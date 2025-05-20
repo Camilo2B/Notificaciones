@@ -1,34 +1,27 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model.core;
 
-import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.BlockedUserFilter;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.EmptyMessageFilter;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.NotificationFilter;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.SMSNotification;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.EventType;
 import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.*;
-import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.EventListener;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.Observer;
 
-public abstract class User implements EventListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class User implements Observer {
     protected String name;
-    protected String id;
-    protected String phone;
     protected String email;
-    protected NotificationStrategy notificationStrategy;
-    protected boolean blocked;
+    protected String phone;
+    protected boolean isBlocked;
+    protected List<String> inbox;
+    protected NotificationStrategy strategy;
 
-    /**
-     * Método Constructor de la clase Usuario
-     *
-     * @param name
-     * @param id
-     * @param phone
-     * @param email
-     */
-    public User(String name, String id, String phone, String email) {
+    //Constructor
+    public User(String name, String email, String phone) {
         this.name = name;
-        this.id = id;
-        this.phone = phone;
         this.email = email;
-        blocked = false;
+        this.phone = phone;
+        this.isBlocked = false;
+        this.inbox = new ArrayList<>();
     }
 
     //=====================================================//
@@ -49,53 +42,49 @@ public abstract class User implements EventListener {
 
     //=====================================================//
 
-    // Inyectar la estrategia desde fuera
-    public void setNotificationStrategy(NotificationStrategy strategy) {
-        this.notificationStrategy = strategy;
+    public void receiveNotification(String message) {
+        inbox.add(message);
     }
 
-    @Override
-    public void notify(String message) {
-        notificationStrategy.sendNotification(this, message);
+    public List<String> getInbox() {
+        return inbox;
     }
 
-    //=====================================================//
+    public void deleteNotification(int index) {
+        if (index >= 0 && index < inbox.size()) {
+            inbox.remove(index);
+        }
+    }
 
-    //=================GETTERS Y SETTERS===================//
+    public boolean isBlocked() {
+        return isBlocked;
+    }
 
+    public void setBlocked(boolean blocked) {
+        this.isBlocked = blocked;
+    }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public NotificationStrategy getStrategy() {
+        return strategy;
     }
 
-    public boolean isBlocked() { return blocked; }
+    public void setStrategy(NotificationStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    @Override
+    public void update(EventType eventType, String message) {
+        String formatted = formatMessage(message);
+        Notification notification = new Notification(this, formatted, strategy);
+        notification.send(); // Strategy used here
+    }
 
 }

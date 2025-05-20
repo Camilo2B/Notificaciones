@@ -5,12 +5,13 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.core.Notification;
 public class EmptyMessageFilter extends NotificationFilter {
 
     @Override
-    public void check(Notification notification) {
-        if (notification.getMessage() == null || notification.getMessage().isEmpty()) {
+    public boolean apply(Notification notification) {
+        String message = notification.getMessage();
+        if (message == null || message.trim().isEmpty()) {
             System.out.println("❌ Notificación cancelada: mensaje vacío.");
-        } else if (next != null) {
-            next.check(notification);
+            return false;
         }
+        return super.apply(notification);
     }
 
 }

@@ -1,6 +1,8 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model.core;
 
 import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.*;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.command.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,32 +11,56 @@ import java.util.Map;
 
 public class NotificationSystem {
 
-    private Map<String, List<EventListener>> listeners = new HashMap<>();
+    private EventManager eventManager;
+    private Map<String, User> users;
+    private NotificationInvoker invoker;
+    private NotificationFilter filterChain;
 
-    public NotificationSystem(String... events) {
-        for (String event : events) {
-            listeners.put(event, new ArrayList<>());
+    public NotificationSystem(ModeratorUser moderator) {
+        this.eventManager = new EventManager();
+        this.users = new HashMap<>();
+        this.invoker = new NotificationInvoker();
+        this.filterChain = createFilterChain(moderator);
+    }
+
+    public void registerUser(User user) {
+        users.put(user.getEmail(), user);
+    }
+
+    public User getUserByEmail(String email) {
+        return users.get(email);
+    }
+
+    public void subscribeUserToEvent(String email, EventType eventType) {
+        User user = users.get(email);
+        if (user != null) {
+            eventManager.subscribe(eventType, user);
         }
     }
 
-    public void subscribe(String evento, EventListener listener) {
-        List<EventListener> users = listeners.get(evento);
-        if (!users.contains(listener)) {
-            users.add(listener);
-        }
-        System.out.println("Suscrito a evento: " + evento);
+    public void notifyEvent(EventType eventType, String message) {
+        eventManager.notify(eventType, message);
     }
 
-    public void unsubscribe(String event, EventListener listener) {
-        listeners.get(event).remove(listener);
-        System.out.println("Desuscrito de evento: " + event);
+    public void sendNotification(Notification notification) {
+        if (!filterChain.apply(notification)) {
+            return;
+        }
+
+        NotificationCommand command = new SendNotificationCommand(notification);
+        invoker.addCommand(command);
+        invoker.executeCommands();
     }
 
-    public void notifySubscribers(String event, String message) {
-        List<EventListener> users = listeners.get(event);
-        System.out.println("🔔 Notificando evento '" + event + "': " + message);
-        for (EventListener listener : users) {
-            listener.notify(message);
-        }
+    private NotificationFilter createFilterChain(ModeratorUser moderator) {
+        NotificationFilter empty = new EmptyMessageFilter();
+        NotificationFilter blocked = new BlockedUserFilter();
+        NotificationFilter moderation = new ModerationFilter(moderator);
+
+        empty.setNext(blocked);
+        blocked.setNext(moderation);
+
+        return empty;
     }
+
 }

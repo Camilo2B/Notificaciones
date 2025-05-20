@@ -4,8 +4,8 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationSt
 
 public class AdminUser extends User {
 
-    public AdminUser(String name, String id, String phone, String email) {
-        super(name, id, phone, email);
+    public AdminUser(String name, String email, String phone) {
+        super(name, email, phone);
     }
 
     @Override
@@ -21,6 +21,10 @@ public class AdminUser extends User {
     @Override
     protected String getFooter() {
         return "Atentamente, el equipo de soporte.";
+    }
+
+    public void publishEvent(NotificationSystem system, EventType eventType, String message) {
+        system.notifyEvent(eventType, message);
     }
 
 }

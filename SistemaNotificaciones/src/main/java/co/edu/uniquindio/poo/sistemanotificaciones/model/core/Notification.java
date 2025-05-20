@@ -27,6 +27,6 @@ public class Notification {
 
     public void send() {
         String formatted = user.formatMessage(message);
-        strategy.sendNotification(user, formatted);
+        strategy.send(user, formatted);
     }
 }
