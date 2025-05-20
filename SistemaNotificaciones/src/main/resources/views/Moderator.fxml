@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="846.0" prefWidth="1217.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.sistemanotificaciones.ViewController.ModeratorViewController">
+   <children>
+      <ImageView fitHeight="846.0" fitWidth="1317.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Moderator.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btnDeleteNotification" layoutX="750.0" layoutY="759.0" mnemonicParsing="false" onAction="#onDeleteNotification" prefHeight="66.0" prefWidth="260.0" text="Eliminar Notificacion">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnLogout" layoutX="1030.0" layoutY="759.0" mnemonicParsing="false" onAction="#onLogout" prefHeight="66.0" prefWidth="199.0" text="Cerrar Sesion">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <ListView fx:id="ListViewNotifications" layoutX="750.0" layoutY="209.0" prefHeight="521.0" prefWidth="479.0" />
+      <TableView fx:id="TableViewUsers" layoutX="29.0" layoutY="224.0" onSort="#ListUsers" prefHeight="465.0" prefWidth="670.0">
+        <columns>
+          <TableColumn fx:id="tbcUserName" prefWidth="152.0" text="Nombre" />
+          <TableColumn fx:id="tbcUserEmail" prefWidth="239.0" text="Email" />
+            <TableColumn fx:id="tbcUserPhone" prefWidth="190.0" text="Telefono" />
+            <TableColumn fx:id="tbcIsBlocked" prefWidth="88.0" text="Bloqueado" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnBlockUser" layoutX="63.0" layoutY="759.0" mnemonicParsing="false" onAction="#onBlockUser" prefHeight="66.0" prefWidth="260.0" text="Bloquear">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnUnblockUser" layoutX="374.0" layoutY="759.0" mnemonicParsing="false" onAction="#onUnblockUser" prefHeight="66.0" prefWidth="260.0" text="Desbloquear">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

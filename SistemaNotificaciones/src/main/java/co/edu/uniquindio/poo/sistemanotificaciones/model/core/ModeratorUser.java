@@ -23,4 +23,11 @@ public class ModeratorUser extends User {
 
     // Only receives notifications via moderation filter.
 
+    public boolean blockUser(NotificationSystem system, String email) {
+        return system.blockUser(email);
+    }
+
+    public boolean unblockUser(NotificationSystem system, String email) {
+        return system.unblockUser(email);
+    }
 }

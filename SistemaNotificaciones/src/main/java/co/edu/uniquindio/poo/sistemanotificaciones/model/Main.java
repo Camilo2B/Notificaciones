@@ -8,57 +8,28 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.*
 
 public class Main {
     public static void main(String[] args) {
+
+        ModeratorUser moderador = new ModeratorUser("Henrique", "henrique@soporte.com", "3003333345");
+
         // Crear el sistema de notificaciones (gestiona eventos)
-        NotificationSystem sistema = new NotificationSystem();
+        NotificationSystem sistema = new NotificationSystem(moderador);
 
         // Crear usuarios
-        User admin = new AdminUser("Ana", "001", "3001112233", "ana@empresa.com");
-        User cliente = new ClientUser("Luis", "002", "3002223344", "luis@email.com");
+        User admin = new AdminUser("Ana", "ana@empresa.com", "3001112233");
+        sistema.registerUser(admin);
+        User cliente = new ClientUser("Luis", "luis@email.com", "3002223344");
+        sistema.registerUser(cliente);
 
         // Asignar estrategias de envío
-        admin.setNotificationStrategy(new EmailNotification());
-        cliente.setNotificationStrategy(new SMSNotification());
+        admin.setStrategy(new EmailNotification());
+        cliente.setStrategy(new SMSNotification());
 
         // Suscribir usuarios al evento "perfilActualizado"
-        sistema.subscribe("Actualización de perfil", admin);
-        sistema.subscribe("Actualización de perfil", cliente);
-
-        // Agregar otros observadores (Observer)
-        sistema.subscribe("Actualización de perfil", new Logger());
-        sistema.subscribe("Actualización de perfil", new Auditor());
-
-        // NOTIFICACIÓN válida
-        Notification notifValida = new Notification(cliente, "Tu perfil fue actualizado.", new SMSNotification());
-
-        // NOTIFICACIÓN con mensaje vacío (fallará)
-        Notification notifVacia = new Notification(admin, "", new EmailNotification());
-
-        // Filtros (Chain of Responsibility)
-        NotificationFilterChain chain = new NotificationFilterChain();
-        chain.addFilter(new EmptyMessageFilter());
-        chain.addFilter(new BlockedUserFilter());
+        sistema.subscribeUserToEvent("ana@empresa.com", EventType.PROMOTION);
+        sistema.subscribeUserToEvent("luis@email.com", EventType.SECURITY_ALERT);
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();
 
-        // Probar notificación válida
-        System.out.println("\n📨 Enviando notificación válida:");
-        NotificationCommand cmd1 = new SendNotificationCommand(notifValida);
-        invoker.addCommand(cmd1);
-        invoker.executeCommands();
-
-
-        // Probar notificación inválida (mensaje vacío)
-        System.out.println("\n📨 Enviando notificación vacía:");
-        NotificationCommand cmd2 = new SendNotificationCommand(notifVacia);
-        invoker.addCommand(cmd2);
-        invoker.executeCommands();
-
-        // Ejecutar todos los comandos válidos
-        System.out.println("\n▶️ Ejecutando comandos:");
-        invoker.executeCommands();
-
-        // Simular evento general usando Observer puro
-        sistema.notifySubscribers("perfilActualizado", "¡Se actualizó tu información correctamente!");
     }
 }

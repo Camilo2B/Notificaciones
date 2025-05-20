@@ -4,10 +4,7 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
 import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.*;
 import co.edu.uniquindio.poo.sistemanotificaciones.model.command.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NotificationSystem {
 
@@ -63,4 +60,29 @@ public class NotificationSystem {
         return empty;
     }
 
+    public Collection<User> getAllUsers() {
+        return users.values();
+    }
+
+    public boolean blockUser(String email) {
+        User user = users.get(email);
+        if (user != null && !(user instanceof ModeratorUser)) { // evita que se bloquee a sí mismo
+            user.setBlocked(true);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unblockUser(String email) {
+        User user = users.get(email);
+        if (user != null) {
+            user.setBlocked(false);
+            return true;
+        }
+        return false;
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
+    }
 }
