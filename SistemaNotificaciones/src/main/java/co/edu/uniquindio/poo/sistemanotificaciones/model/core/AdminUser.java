@@ -1,6 +1,6 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model.core;
 
-import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationStrategy;
+import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
 
 public class AdminUser extends User {
 
