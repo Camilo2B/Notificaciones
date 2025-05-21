@@ -5,12 +5,10 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.NotificationSt
 public class Notification {
     private final User user;
     private final String message;
-    private final NotificationStrategy strategy;
 
-    public Notification(User user, String message, NotificationStrategy strategy) {
+    public Notification(User user, String message) {
         this.user = user;
         this.message = message;
-        this.strategy = strategy;
     }
 
     public User getUser() {
@@ -21,12 +19,9 @@ public class Notification {
         return message;
     }
 
-    public NotificationStrategy getStrategy() {
-        return strategy;
-    }
 
     public void send() {
         String formatted = user.formatMessage(message);
-        strategy.send(user, formatted);
+        user.getStrategy().send(user, formatted);
     }
 }

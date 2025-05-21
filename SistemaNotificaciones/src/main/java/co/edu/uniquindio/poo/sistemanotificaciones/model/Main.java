@@ -12,7 +12,7 @@ public class Main {
         ModeratorUser moderador = new ModeratorUser("Henrique", "henrique@soporte.com", "3003333345");
 
         // Crear el sistema de notificaciones (gestiona eventos)
-        NotificationSystem sistema = new NotificationSystem(moderador);
+        NotificationSystem sistema = NotificationSystem.getInstance(moderador);
 
         // Crear usuarios
         User admin = new AdminUser("Ana", "ana@empresa.com", "3001112233");
@@ -27,6 +27,11 @@ public class Main {
         // Suscribir usuarios al evento "perfilActualizado"
         sistema.subscribeUserToEvent("ana@empresa.com", EventType.PROMOTION);
         sistema.subscribeUserToEvent("luis@email.com", EventType.SECURITY_ALERT);
+
+        sistema.getEventManager().subscribe(EventType.PROMOTION, cliente);
+        sistema.getEventManager().subscribe(EventType.SECURITY_ALERT, cliente);
+
+        new Notification(cliente, "20% de descuento en electrodomésticos");
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();

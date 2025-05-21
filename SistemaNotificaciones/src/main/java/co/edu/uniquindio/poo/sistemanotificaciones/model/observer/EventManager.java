@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventManager implements Subject{
+public class EventManager implements Subject {
 
     private Map<EventType, List<Observer>> observers = new HashMap<>();
 
@@ -32,6 +32,13 @@ public class EventManager implements Subject{
         }
     }
 
-
-
+    /**
+     * Verifica si un observador está suscrito a un tipo de evento
+     * @param observer El observador a verificar
+     * @param eventType El tipo de evento
+     * @return true si el observador está suscrito, false en caso contrario
+     */
+    public boolean isSubscribed(Observer observer, EventType eventType) {
+        return observers.get(eventType).contains(observer);
+    }
 }

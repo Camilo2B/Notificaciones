@@ -1,6 +1,5 @@
 package co.edu.uniquindio.poo.sistemanotificaciones.model;
 
-import co.edu.uniquindio.poo.sistemanotificaciones.ViewController.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

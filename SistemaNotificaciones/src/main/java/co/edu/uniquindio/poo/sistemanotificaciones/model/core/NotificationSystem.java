@@ -8,16 +8,26 @@ import java.util.*;
 
 public class NotificationSystem {
 
+    private static NotificationSystem instance; // Instancia única
     private EventManager eventManager;
     private Map<String, User> users;
     private NotificationInvoker invoker;
     private NotificationFilter filterChain;
 
-    public NotificationSystem(ModeratorUser moderator) {
+    // Constructor privado para evitar instanciación directa
+    private NotificationSystem(ModeratorUser moderator) {
         this.eventManager = new EventManager();
         this.users = new HashMap<>();
         this.invoker = new NotificationInvoker();
         this.filterChain = createFilterChain(moderator);
+    }
+
+    // Método Singleton para obtener la instancia
+    public static NotificationSystem getInstance(ModeratorUser moderator) {
+        if (instance == null) {
+            instance = new NotificationSystem(moderator);
+        }
+        return instance;
     }
 
     public void registerUser(User user) {
@@ -66,7 +76,7 @@ public class NotificationSystem {
 
     public boolean blockUser(String email) {
         User user = users.get(email);
-        if (user != null && !(user instanceof ModeratorUser)) { // evita que se bloquee a sí mismo
+        if (user != null && !(user instanceof ModeratorUser)) {
             user.setBlocked(true);
             return true;
         }

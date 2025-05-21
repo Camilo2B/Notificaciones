@@ -87,4 +87,23 @@ public abstract class User implements Observer {
         notification.send(); // Strategy used here
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setInbox(List<String> inbox) {
+        this.inbox = inbox;
+    }
 }
