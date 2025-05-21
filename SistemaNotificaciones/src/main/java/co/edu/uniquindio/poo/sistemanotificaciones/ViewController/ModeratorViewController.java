@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -111,11 +112,9 @@ public class ModeratorViewController {
      * Carga los usuarios en la tabla
      */
     private void loadUsers() {
-        usersList.clear();
-        List<User> allUsers = notificationsSystem.getAllUsers().stream().toList();
-        if (allUsers != null && !allUsers.isEmpty()) {
-            usersList.addAll(allUsers);
-        }
+        List<User> adminExamples = new ArrayList<>();
+        adminExamples.add(new ModeratorUser("Oscar", "cliente@gmail.com", "1234567890"));
+        adminExamples.add(new ModeratorUser("Mauro", "admin@gmail.com", "0987654321"));
     }
 
     /**

@@ -24,7 +24,7 @@ public class Main {
 
         // Asignar estrategias de envío
         admin.setStrategy(new EmailNotification());
-        cliente.setStrategy(new SMSNotification());
+        cliente.setStrategy(new EmailNotification());
 
         // Suscribir usuarios al evento "perfilActualizado"
         sistema.subscribeUserToEvent("ana@empresa.com", EventType.PROMOTION);
@@ -33,13 +33,8 @@ public class Main {
         sistema.getEventManager().subscribe(EventType.PROMOTION, cliente);
         sistema.getEventManager().subscribe(EventType.SECURITY_ALERT, cliente);
 
-        Notification promotion = new Notification(cliente, "20% de descuento en electrodomésticos");
+        Notification promotion = new Notification(cliente, "Ofertas especiales los martes");
         promotion.send();
-
-        LinkedList<String> inboxEjemplo = new LinkedList<>();
-        inboxEjemplo.add("20% de descuento en toda la tienda");
-
-        admin.setInbox(inboxEjemplo);
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();

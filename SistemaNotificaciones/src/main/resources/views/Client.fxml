@@ -10,28 +10,28 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.sistemanotificaciones.ViewController.ClientViewController">
    <children>
-      <ImageView fitHeight="846.0" fitWidth="1317.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="686.0" fitWidth="1053.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Client.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnDeleteNotification" layoutX="63.0" layoutY="773.0" mnemonicParsing="false" onAction="#onDeleteNotification" prefHeight="66.0" prefWidth="260.0" text="Eliminar Notificacion">
+      <Button fx:id="btnDeleteNotification" layoutX="57.0" layoutY="630.0" mnemonicParsing="false" onAction="#onDeleteNotification" prefHeight="45.0" prefWidth="174.0" text="Eliminar Notificacion">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Button fx:id="btnLogout" layoutX="431.0" layoutY="773.0" mnemonicParsing="false" onAction="#onLogout" prefHeight="66.0" prefWidth="199.0" text="Cerrar Sesion">
+      <Button fx:id="btnLogout" layoutX="356.0" layoutY="630.0" mnemonicParsing="false" onAction="#onLogout" prefHeight="27.0" prefWidth="150.0" text="Cerrar Sesion">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <ListView fx:id="ListViewNotifications" layoutX="23.0" layoutY="265.0" prefHeight="460.0" prefWidth="678.0" />
-      <CheckBox fx:id="checkSMS" layoutX="848.0" layoutY="377.0" mnemonicParsing="false" onAction="#onCheckSMS" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkEmail" layoutX="1029.0" layoutY="377.0" mnemonicParsing="false" onAction="#onCheckEmail" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkPush" layoutX="1178.0" layoutY="377.0" mnemonicParsing="false" onAction="#onCheckPush" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkPromotions" layoutX="1077.0" layoutY="607.0" mnemonicParsing="false" onAction="#onCheckPromotions" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkSecurityAlerts" layoutX="1078.0" layoutY="655.0" mnemonicParsing="false" onAction="#onCheckSecurityAlerts" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkMaintenance" layoutX="1079.0" layoutY="706.0" mnemonicParsing="false" onAction="#onCheckMaintenance" prefHeight="25.0" prefWidth="14.0" />
-      <CheckBox fx:id="checkProfileUpdates" layoutX="1079.0" layoutY="767.0" mnemonicParsing="false" onAction="#onCheckProfileUpdates" prefHeight="25.0" prefWidth="14.0" />
+      <ListView fx:id="ListViewNotifications" layoutX="14.0" layoutY="213.0" prefHeight="355.0" prefWidth="558.0" />
+      <CheckBox fx:id="checkSMS" layoutX="642.0" layoutY="350.0" mnemonicParsing="false" onAction="#onCheckSMS" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkEmail" layoutX="777.0" layoutY="350.0" mnemonicParsing="false" onAction="#onCheckEmail" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkPush" layoutX="897.0" layoutY="350.0" mnemonicParsing="false" onAction="#onCheckPush" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkPromotions" layoutX="864.0" layoutY="483.0" mnemonicParsing="false" onAction="#onCheckPromotions" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkSecurityAlerts" layoutX="865.0" layoutY="531.0" mnemonicParsing="false" onAction="#onCheckSecurityAlerts" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkMaintenance" layoutX="866.0" layoutY="582.0" mnemonicParsing="false" onAction="#onCheckMaintenance" prefHeight="25.0" prefWidth="14.0" />
+      <CheckBox fx:id="checkProfileUpdates" layoutX="866.0" layoutY="643.0" mnemonicParsing="false" onAction="#onCheckProfileUpdates" prefHeight="25.0" prefWidth="14.0" />
    </children>
 </AnchorPane>

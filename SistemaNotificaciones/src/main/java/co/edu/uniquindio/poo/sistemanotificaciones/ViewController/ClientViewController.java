@@ -16,6 +16,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ClientViewController {
@@ -68,13 +70,26 @@ public class ClientViewController {
     }
 
     /**
+     * Carga las notificaciones del cliente en la lista
+     */
+    private void loadNotifications() {
+        // Ejemplos de notificaciones
+        List<String> notificationExamples = new ArrayList<>();
+        notificationExamples.add("Ofertas especiales los martes");
+
+        notificationsList.clear();
+        for (String notification : notificationExamples) {
+            notificationsList.add(notification);
+        }
+    }
+
+    /**
      * Inicializa el controlador
      */
     @FXML
     public void initialize() {
         // Verificar que el cliente esté establecido
         if (currentClient == null) {
-            showAlert(Alert.AlertType.ERROR, "Error", "No se ha establecido un cliente.");
             return;
         }
 
@@ -92,15 +107,6 @@ public class ClientViewController {
         initializeCheckBoxes();
     }
 
-    /**
-     * Carga las notificaciones del cliente en la lista
-     */
-    private void loadNotifications() {
-        notificationsList.clear();
-        if (currentClient != null) {
-            notificationsList.addAll(currentClient.getInbox());
-        }
-    }
 
     /**
      * Configura el estado inicial de los CheckBox según las suscripciones y estrategia del cliente
@@ -108,6 +114,7 @@ public class ClientViewController {
     private void initializeCheckBoxes() {
         // Configurar CheckBox de estrategias de notificación
         NotificationStrategy strategy = currentClient.getStrategy();
+        checkEmail.setSelected(true);
         if (strategy instanceof SMSNotification) {
             checkSMS.setSelected(true);
         } else if (strategy instanceof EmailNotification) {
