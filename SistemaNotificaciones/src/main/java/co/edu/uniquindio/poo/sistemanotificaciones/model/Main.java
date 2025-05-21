@@ -6,6 +6,8 @@ import co.edu.uniquindio.poo.sistemanotificaciones.model.observer.*;
 import co.edu.uniquindio.poo.sistemanotificaciones.model.strategy.*;
 import co.edu.uniquindio.poo.sistemanotificaciones.model.chainOfResponsibility.*;
 
+import java.util.LinkedList;
+
 public class Main {
     public static void main(String[] args) {
 
@@ -33,6 +35,11 @@ public class Main {
 
         Notification promotion = new Notification(cliente, "20% de descuento en electrodomésticos");
         promotion.send();
+
+        LinkedList<String> inboxEjemplo = new LinkedList<>();
+        inboxEjemplo.add("20% de descuento en toda la tienda");
+
+        admin.setInbox(inboxEjemplo);
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();

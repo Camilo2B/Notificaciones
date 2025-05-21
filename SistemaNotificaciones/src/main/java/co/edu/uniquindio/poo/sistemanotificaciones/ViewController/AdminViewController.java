@@ -127,9 +127,9 @@ public class AdminViewController {
     private void loadAdmins() {
         // Ejemplos de administradores
         List<ModeratorUser> adminExamples = new ArrayList<>();
-        adminExamples.add(new ModeratorUser("Admin1", "admin1@example.com", "1234567890"));
-        adminExamples.add(new ModeratorUser("Admin2", "admin2@example.com", "0987654321"));
-        adminExamples.add(new ModeratorUser("Admin3", "admin3@example.com", "1122334455"));
+        adminExamples.add(new ModeratorUser("Oscar", "admin1@example.com", "1234567890"));
+        adminExamples.add(new ModeratorUser("Mauro", "admin2@example.com", "0987654321"));
+        adminExamples.add(new ModeratorUser("Julian", "admin3@example.com", "1122334455"));
 
         // Convertir a una lista de cadenas para mostrar en el ListView
         adminsList.clear();
@@ -138,9 +138,20 @@ public class AdminViewController {
         }
     }
 
+    private void loadNotifications() {
+        // Ejemplos de administradores
+        List<String> notificationExamples = new ArrayList<>();
+        notificationExamples.add("Ofertas especiales los martes");
+
+        // Convertir a una lista de cadenas para mostrar en el ListView
+        adminsList.clear();
+        for (String notification : notificationExamples) {
+            notificationsList.add(notification);
+        }
+    }
+
+
     /**
-     * Carga las notificaciones del administrador en la lista
-     */
     private void loadNotifications() {
         notificationsList.clear();
         if (currentAdmin != null) {
@@ -159,6 +170,7 @@ public class AdminViewController {
             System.out.println("currentAdmin es null en loadNotifications.");
         }
     }
+    */
 
     /**
      * Manejador para eliminar notificación seleccionada
