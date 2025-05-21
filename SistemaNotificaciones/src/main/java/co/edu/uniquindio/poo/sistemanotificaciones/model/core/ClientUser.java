@@ -24,7 +24,7 @@ public class ClientUser extends User {
     }
 
     public Notification createProfileUpdateNotification(String customMessage) {
-        return new Notification(this, customMessage, strategy);
+        return new Notification(this, customMessage);
     }
 
 }

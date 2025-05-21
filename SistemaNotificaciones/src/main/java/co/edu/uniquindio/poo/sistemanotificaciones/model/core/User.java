@@ -83,7 +83,7 @@ public abstract class User implements Observer {
     @Override
     public void update(EventType eventType, String message) {
         String formatted = formatMessage(message);
-        Notification notification = new Notification(this, formatted, strategy);
+        Notification notification = new Notification(this, formatted);
         notification.send(); // Strategy used here
     }
 
