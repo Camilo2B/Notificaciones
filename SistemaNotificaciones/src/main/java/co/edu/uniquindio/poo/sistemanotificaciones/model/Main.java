@@ -31,7 +31,8 @@ public class Main {
         sistema.getEventManager().subscribe(EventType.PROMOTION, cliente);
         sistema.getEventManager().subscribe(EventType.SECURITY_ALERT, cliente);
 
-        new Notification(cliente, "20% de descuento en electrodomésticos");
+        Notification promotion = new Notification(cliente, "20% de descuento en electrodomésticos");
+        promotion.send();
 
         // INVOCADOR de comandos
         NotificationInvoker invoker = new NotificationInvoker();

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.poo.sistemanotificaciones.ViewController.LoginViewController">
+   <children>
+      <ImageView fitHeight="846.0" fitWidth="1317.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Login.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="correoTxtField" layoutX="512.0" layoutY="462.0" />
+      <Label fx:id="lblCorreo" layoutX="550.0" layoutY="410.0" text="Ingrese su correo">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnIniciarSesion" layoutX="811.0" layoutY="462.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Iniciar Sesion" />
+   </children>
+</AnchorPane>
